@@ -1,0 +1,74 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long int
+#define endl "\n"
+bool isPrime[100008];
+void ComputeSieve(int n)
+{
+	fill(isPrime, isPrime + n, true);
+	isPrime[1] = false;
+	for (int i = 2; i * i <= n; i++)
+	{
+		if (isPrime[i])
+		{
+			for (int j = i * i; j <= n; j += i)
+			{
+				isPrime[j] = false;
+			}
+		}
+	}
+}
+void solve(int l, int r)
+{
+
+	vector<int> v;
+	for (int i = 2; i * i <= r; i++)
+	{
+		if (isPrime[i])
+		{
+			v.emplace_back(i);
+		}
+	}
+	int size = r - l + 1;
+	int dummy[size];
+	fill(dummy, dummy + size, 1);
+	for (auto i : v)
+	{
+		int temp = (l / i);
+		temp *= i;
+		if (temp < l)
+			temp += i;
+		temp = max(temp, i * i);
+		for (int j = temp; j <= r; j += i)
+		{
+
+			dummy[j - l] = 0;
+		}
+	}
+	if (l == 1)
+		dummy[0] = 0;
+	for (int i = l; i <= r; i++)
+	{
+
+		if (dummy[i - l])
+			cout << i << endl;
+	}
+
+}
+
+int main()
+{
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	ComputeSieve(100008);
+	int test;
+	cin >> test;
+
+	while (test--)
+	{
+		int l, r;
+		cin >> l >> r;
+		solve(l, r);
+		cout << endl;
+	}
+}
