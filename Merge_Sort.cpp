@@ -1,85 +1,65 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define ll long long int
-#define repf(i,j,k) for(int i=j; i<k; i++)
-#define repb(i,j,k) for(int i=j; i>k; i--)
+#define repf(i, j, k) for (int i = j; i < k; i++)
+#define repb(i, j, k) for (int i = j; i > k; i--)
 #define endl "\n"
-void Merge(int arr[],int low,int mid,int high)
+void Merge(int arr[], int low, int mid, int high)
 {
-    int n1=mid-low+1;
-    int n2=high-mid;
-    int left[n1];
-    int right[n2];
-    repf(i,0,n1)
+    int left = low;
+    int right = mid + 1;
+    vector<int> v;
+    while (left <= mid && right <= high)
     {
-        left[i]=arr[low+i];
-    }
-    repf(i,0,n2)
-    {
-        right[i]=arr[mid+1+i];
-    }
-    int i=0,j=0;
-    int k=low;
-    while(i<n1&&j<n2)
-    {
-        if(left[i]<=right[j])
+        if (arr[left] <= arr[right])
         {
-            arr[k]=left[i];
-            i++;
+            v.emplace_back(arr[left++]);
         }
         else
         {
-            arr[k]=right[j];
-            j++;
+            v.emplace_back(arr[right++]);
         }
-        k++;
     }
-    while(i<n1)
+    while (left <= mid)
     {
-        arr[k]=left[i];
-        i++;
-        k++;
+        v.emplace_back(arr[left++]);
     }
-    while(j<n2)
+    while (right <= high)
     {
-        arr[k]=right[j];
-        j++;
-        k++;
+        v.emplace_back(arr[right++]);
+    }
+    for (auto i : v)
+    {
+        arr[low++] = i;
     }
 }
-void MergeSort(int arr[],int low,int high)
+void MergeSort(int arr[], int low, int high)
 {
-    if(low>=high)return;
-    int mid=((high-low)>>1)+low;
-    MergeSort(arr,low,mid);
-    MergeSort(arr,mid+1,high);
-    Merge(arr,low,mid,high);
-    
+    int mid = ((high - low) >> 1) + low;
+    if (low == high)
+        return;
+    MergeSort(arr, low, mid);
+    MergeSort(arr, mid + 1, high);
+    Merge(arr, low, mid, high);
 }
 int solve()
 {
     int n;
-    cin>>n;
+    cin >> n;
     int arr[n];
-    repf(i,0,n)
-    {
-        cin>>arr[i];
-    }
-    MergeSort(arr,0,n-1);
-    repf(i,0,n)
-    {
-        cout<<arr[i]<<" ";
-    }
-    cout<<endl;
 
+    repf(i, 0, n) cin >> arr[i];
+    MergeSort(arr, 0, n - 1);
+    repf(i, 0, n) cout << arr[i] << " ";
+    cout << endl;
 }
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     int test;
-    cin>>test;
-    while(test--)
+    cin >> test;
+    while (test--)
     {
         solve();
     }
