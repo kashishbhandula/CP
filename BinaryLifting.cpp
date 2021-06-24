@@ -29,6 +29,7 @@ in Find(in node, in k)
             node = Par[node][i];
         }
     }
+    if(node==0)return -1;
     return node;
 }
 void Dfs(in node, vector<vector<in>> &adj,vector<in>&height, in parent = 0)
