@@ -6,8 +6,15 @@ using namespace std;
 #define repb(i, j, k) for (in i = j; i > k; i--)
 #define endl "\n"
 in Par[100005][17];
-in BinaryLifting(in u, in v, in idx = 16)
+in BinaryLifting(in u, in v, vector<in> &height, in idx = 16)
 {
+    if (height[u] > height[v])
+        swap(u, v);
+    in diff = height[v] - height[u];
+    v=Find(v,diff);
+    if (u == v)
+        return v;
+
     while (idx >= 0)
     {
         if (Par[u][idx] != Par[v][idx])
@@ -18,7 +25,7 @@ in BinaryLifting(in u, in v, in idx = 16)
 
         idx--;
     }
-    return u;
+    return Par[u][0];
 }
 in Find(in node, in k)
 {
@@ -73,10 +80,9 @@ in solve()
     {
         in u, v;
         cin >> u >> v;
-        in Min = (height[u], height[v]);
-        u = Find(u, height[u] - Min);
-        v = Find(v, height[v] - Min);
-        cout << Find(BinaryLifting(u, v), 1) << endl;
+      
+        
+        cout << BinaryLifting(u, v)) << endl;
     }
 }
 int main()
