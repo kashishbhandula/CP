@@ -3,7 +3,8 @@ using namespace std;
 #define ll long long int
 #define repf(i, j, k) for (int i = j; i < k; i++)
 #define repb(i, j, k) for (int i = j; i > k; i--)
-#define endl "\n"
+// #define endl "\n"
+// both work same ....
 bool Check(string str, int end, int start)
 {
     while (start <= end)
