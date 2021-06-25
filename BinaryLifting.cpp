@@ -1,17 +1,46 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define ll long long int
-#define in int
+#define in long long int
+#define ll int
 #define repf(i, j, k) for (in i = j; i < k; i++)
 #define repb(i, j, k) for (in i = j; i > k; i--)
 #define endl "\n"
-in Par[100005][17];
-in BinaryLifting(in u, in v, vector<in> &height, in idx = 16)
+in Par[200018][20];
+void Dfs(in node, vector<vector<in>> &adj, vector<in> &height, in parent = 0)
+{
+    Par[node][0] = parent;
+    repf(i, 1, 20)
+    {
+        Par[node][i] = Par[Par[node][i - 1]][i - 1];
+    }
+    for (auto it : adj[node])
+    {
+        if (parent != it)
+        {
+            height[it] += height[node];
+            Dfs(it, adj, height, node);
+        }
+    }
+}
+in Find(in node, in k)
+{
+    repf(i, 0, 20)
+    {
+        if (k & (1 << i))
+        {
+            node = Par[node][i];
+        }
+    }
+    if (node == 0)
+        return -1;
+    return node;
+}
+in BinaryLifting(in u, in v, vector<in> &height, in idx = 19)
 {
     if (height[u] > height[v])
         swap(u, v);
     in diff = height[v] - height[u];
-    v=Find(v,diff);
+    v = Find(v, diff);
     if (u == v)
         return v;
 
@@ -27,34 +56,7 @@ in BinaryLifting(in u, in v, vector<in> &height, in idx = 16)
     }
     return Par[u][0];
 }
-in Find(in node, in k)
-{
-    repf(i, 0, 17)
-    {
-        if (k & (1 << i))
-        {
-            node = Par[node][i];
-        }
-    }
-    if(node==0)return -1;
-    return node;
-}
-void Dfs(in node, vector<vector<in>> &adj,vector<in>&height, in parent = 0)
-{
-    Par[node][0] = parent;
-    repf(i, 1, 17)
-    {
-        Par[node][i] = Par[Par[node][i - 1]][i - 1];
-    }
-    for (auto it : adj[node])
-    {
-        if (it != parent)
-        {
-            height[it]+=height[node];
-            Dfs(it, adj,height, node);
-        }
-    }
-}
+
 vector<vector<in>> Input(in n, in e)
 {
 
@@ -68,31 +70,38 @@ vector<vector<in>> Input(in n, in e)
     }
     return adj;
 }
-in solve()
+void solve()
 {
     in n, e, q;
-    cin >> n >> e >> q;
-    vector<vector<in>> adj = Input(n, e);
-    vector<in>height(n+1,1);
-    height[0]=0;
-    Dfs(1, adj,height);
+    cin >> n >> q;
+    e = n - 1;
+
+    vector<vector<in>> adj;
+    vector<in> height(n + 1, 1);
+    height[0] = 0;
+    adj = Input(n, e);
+    Dfs(1, adj, height);
     while (q--)
     {
         in u, v;
         cin >> u >> v;
-      
-        
-        cout << BinaryLifting(u, v)) << endl;
+
+        in common = BinaryLifting(u, v, height);
+        //cout << height[u]<<" "<<height[v]<<" "<<common << endl;
+        if (common == u || common == v)
+        {
+            cout << abs(height[u] - height[v]) << endl;
+        }
+        else
+        {
+            cout << abs(height[u] + height[v] - (2 * height[common])) << endl;
+        }
     }
 }
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    int test;
-    cin >> test;
-    while (test--)
-    {
-        solve();
-    }
+
+    solve();
 }
